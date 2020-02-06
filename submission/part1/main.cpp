@@ -6,6 +6,100 @@
 
 using namespace std;
 
+void int_row(vector<vector<string>> & matrix) {
+    int base = 0;
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[0].size(); ++j) {
+            base = base + atoi(matrix[i][j].c_str());
+        }
+    }
+}
+
+void int_col(vector<vector<string>> & matrix) {
+    int base = 0;
+    for (int j = 0; j < matrix[0].size(); ++j) {
+        for (int i = 0; i < matrix.size(); ++i) {
+            base = base + atoi(matrix[i][j].c_str());
+        }
+    }
+}
+
+void float_row(vector<vector<string>> & matrix) {
+    float base = 0;
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[0].size(); ++j) {
+            base = base + atof(matrix[i][j].c_str());
+        }
+    }
+}
+
+void float_col(vector<vector<string>> & matrix) {
+    float base = 0;
+    for (int j = 0; j < matrix[0].size(); ++j) {
+        for (int i = 0; i < matrix.size(); ++i) {
+            base = base + atof(matrix[i][j].c_str());
+        }
+    }
+}
+
+void bool_col(vector<vector<string>> & matrix) {
+    bool base = false;
+    for (int j = 0; j < matrix[0].size(); ++j) {
+        for (int i = 0; i < matrix.size(); ++i) {
+            base = base ^ (matrix[i][j] != "0");
+        }
+    }
+}
+
+void bool_row(vector<vector<string>> & matrix) {
+    bool base = false;
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[0].size(); ++j) {
+            base = base ^ (matrix[i][j] != "0");
+        }
+    }
+}
+
+void string_col(vector<vector<string>> & matrix) {
+    int base = 0;
+    for (int j = 0; j < matrix[0].size(); ++j) {
+        for (int i = 0; i < matrix.size(); ++i) {
+            base = base + matrix[i][j].size();
+        }
+    }
+}
+
+void string_row(vector<vector<string>> & matrix) {
+    int base = 0;
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[0].size(); ++j) {
+            base = base + matrix[i][j].size();
+        }
+    }
+}
+
+void benchmark(string dType, string pattern, vector<vector<string>> matrix) {
+    if (dType == "int")
+        if (pattern == "byrow")
+            int_row(matrix);
+        else if (pattern == "bycol")
+            int_col(matrix);
+    if (dType == "float")
+        if (pattern == "byrow")
+            float_row(matrix);
+        else if (pattern == "bycol")
+            float_col(matrix);
+    if (dType == "bool")
+        if (pattern == "byrow")
+            bool_row(matrix);
+        else if (pattern == "bycol")
+            bool_col(matrix);
+    if (dType == "string")
+        if (pattern == "byrow")
+            string_row(matrix);
+        else if (pattern == "bycol")
+            string_col(matrix);     
+}
 
 // credit to https://stackoverflow.com/questions/865668/how-to-parse-command-line-arguments-in-c
 // find out the argument of given option
@@ -382,6 +476,14 @@ int main(int argc, char** argv)
         }
 
         cout << value << endl;
+    }
+
+    // benchmarking
+    if (cmdOptionExists(argv, argv + argc, "-type")) {
+        string dType = getCmdOption(argv, argv + argc, "-type");
+        string pattern = getCmdOption(argv, argv + argc, "-pattern");
+        
+        benchmark(dType, pattern, matrix);
     }
     return 0;
 }
